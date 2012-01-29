@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created: Sun Jan 29 18:04:38 2012
+** Created: Sun Jan 29 18:25:05 2012
 **      by: Qt User Interface Compiler version 4.7.4
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -14,6 +14,7 @@
 #include <QtGui/QAction>
 #include <QtGui/QApplication>
 #include <QtGui/QButtonGroup>
+#include <QtGui/QCheckBox>
 #include <QtGui/QGridLayout>
 #include <QtGui/QGroupBox>
 #include <QtGui/QHBoxLayout>
@@ -47,6 +48,7 @@ public:
     QPlainTextEdit *editMessage;
     QLabel *lblRequiredLength;
     QLabel *labelInputLength;
+    QCheckBox *checkRemoveSpaces;
     QGroupBox *groupBox_2;
     QGridLayout *gridLayout_3;
     QLabel *label_3;
@@ -125,6 +127,11 @@ public:
         labelInputLength->setSizePolicy(sizePolicy1);
 
         gridLayout_2->addWidget(labelInputLength, 3, 1, 1, 1);
+
+        checkRemoveSpaces = new QCheckBox(groupBox);
+        checkRemoveSpaces->setObjectName(QString::fromUtf8("checkRemoveSpaces"));
+
+        gridLayout_2->addWidget(checkRemoveSpaces, 0, 2, 1, 1);
 
 
         gridLayout->addWidget(groupBox, 1, 0, 2, 2);
@@ -225,13 +232,14 @@ public:
 
     void retranslateUi(QMainWindow *MainWindow)
     {
-        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", 0, QApplication::UnicodeUTF8));
+        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "Information defense", 0, QApplication::UnicodeUTF8));
         btnEncrypt->setText(QApplication::translate("MainWindow", "Encode", 0, QApplication::UnicodeUTF8));
         groupBox->setTitle(QApplication::translate("MainWindow", "Source data", 0, QApplication::UnicodeUTF8));
         label_5->setText(QApplication::translate("MainWindow", "Message", 0, QApplication::UnicodeUTF8));
         editMessage->setPlainText(QApplication::translate("MainWindow", "\320\223\320\240\320\243\320\227\320\230\320\242\320\225\320\220\320\237\320\225\320\233\320\254\320\241\320\230\320\235\320\253", 0, QApplication::UnicodeUTF8));
         lblRequiredLength->setText(QApplication::translate("MainWindow", "Required length: Unknown", 0, QApplication::UnicodeUTF8));
         labelInputLength->setText(QApplication::translate("MainWindow", "Text length: 0", 0, QApplication::UnicodeUTF8));
+        checkRemoveSpaces->setText(QApplication::translate("MainWindow", "Delete spaces", 0, QApplication::UnicodeUTF8));
         groupBox_2->setTitle(QApplication::translate("MainWindow", "Output data", 0, QApplication::UnicodeUTF8));
         label_3->setText(QApplication::translate("MainWindow", "Result", 0, QApplication::UnicodeUTF8));
         btnDecrypt->setText(QApplication::translate("MainWindow", " Decode", 0, QApplication::UnicodeUTF8));
