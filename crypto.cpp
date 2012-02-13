@@ -107,7 +107,7 @@ void encrypt(const wchar_t *input_string, wchar_t *output_string,
                     secondKey[i].position, i);
     }
 
-
+    //Creating output string
     cur = 0;
     for(int j = 0; j < second_len; j++)
     {
@@ -227,4 +227,146 @@ void decrypt(const wchar_t *input_string, wchar_t *output_string,
     delete []matrix_rows;
     delete [] firstKey;
     delete [] secondKey;
+}
+
+int indexOf(wchar_t c, const wchar_t *alphabet, int m)
+{
+    for(int i = 0; i < m; i++)
+    {
+        if (alphabet[i] == c)
+        {
+            return i;
+        }
+    }
+
+    return -1;
+}
+
+void affine_encrypt(const wchar_t *input_string,
+                    const wchar_t *alphabet, int a, int b, int m,
+                    wchar_t *output_string)
+{
+    int pos;
+    for(int i = 0; i < wcslen(input_string); i++)
+    {
+        if (isalpha(input_string[i]))
+        {
+            pos = (a*indexOf(input_string[i], alphabet, m) +b) % m;
+            output_string[i] = alphabet[pos];
+        }
+        else
+        {
+            output_string[i] = input_string[i];
+        }
+    }
+
+    output_string[wcslen(input_string)] = '\0';
+}
+
+int gcd_extended (int a, int b, int & x, int & y) {
+    if (a == 0) {
+        x = 0; y = 1;
+        return b;
+    }
+    int x1, y1;
+    int d = gcd_extended(b%a, a, x1, y1);
+    x = y1 - (b / a) * x1;
+    y = x1;
+    return d;
+}
+
+int reverse_number(int a, int m)
+{
+    int x, y;
+    int g = gcd_extended(a, m, x, y);
+    x = (x % m + m) % m;
+    qDebug("\nX is %d\n", x);
+    return x;
+}
+
+void affine_decrypt(const wchar_t *input_string,
+                    const wchar_t *alphabet, int a, int b, int m,
+                    wchar_t *output_string)
+{
+    long pos;
+    int index;
+    int reverse;
+    for(int i = 0; i < wcslen(input_string); i++)
+    {
+        if (isalpha(input_string[i]))
+        {
+            index = indexOf(input_string[i], alphabet, m);
+            qDebug("index is %d", index);
+            reverse = abs(reverse_number(a, m));
+            qDebug("reverse is %d", reverse);
+            pos = (abs(index - b)*reverse) % m;
+            qDebug("pos is %d", pos);
+            output_string[i] = alphabet[abs(pos)];
+        }
+        else
+        {
+            output_string[i] = input_string[i];
+        }
+
+    }
+
+    output_string[wcslen(input_string)] = '\0';
+}
+
+wchar_t find_proper( ProbabilityMap &probs, ProbabilityMap &p,
+                     wchar_t c)
+{
+    double delta = probs[c] - p[c];
+    if (delta < 0)
+        delta *= -1.0;
+
+    wchar_t res = p.begin()->first;
+
+    for(ProbabilityMap::iterator i = p.begin(); i != p.end(); i++)
+    {
+        double curDelta = i->second - probs[c];
+        if (curDelta < 0)
+            curDelta *= -1.0;
+
+        if (curDelta < delta)
+        {
+            delta = curDelta;
+            res = i->first;
+        }
+    }
+
+    return res;
+}
+
+void analyze_decrypt(ProbabilityMap &p, const wchar_t *input_string,
+                     wchar_t *output_string, wchar_t *alphabet, int m)
+{
+    map<wchar_t, int> numChars;
+    ProbabilityMap probs;
+
+    int length = wcslen(input_string);
+
+    for(int i = 0; i < m ; i++)
+    {
+        numChars[alphabet[i]]  = 0;
+        probs[alphabet[i]]  = 0.0;
+    }
+
+    for(int i = 0; i < wcslen(input_string); i++)
+    {
+        numChars[input_string[i]] += 1;
+    }
+
+    for(map<wchar_t, int>::iterator i = numChars.begin();
+        i != numChars.end(); i++)
+    {
+        probs[i->first] = (double)i->second / (double)length;
+    }
+
+    for(int i = 0; i < length; i++)
+    {
+        output_string[i] = find_proper(probs, p, input_string[i]);
+    }
+
+    output_string[length] = '\0';
 }

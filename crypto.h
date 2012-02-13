@@ -3,14 +3,18 @@
 
 #include <cstring>
 #include <algorithm>
+#include <map>
+#include <QDebug>
 using namespace std;
 
+typedef map<wchar_t, double> ProbabilityMap;
 struct KeyChar
 {
     char sym;
     int position;
 };
 
+int indexOf(wchar_t c, const wchar_t *alphabet, int m);
 
 /**
   @param matrix 2D Array
@@ -40,5 +44,38 @@ void encrypt(const wchar_t *input_string, wchar_t *output_string,
 
 void decrypt(const wchar_t *input_string, wchar_t *output_string,
              const wchar_t *first_key, const wchar_t *second_key);
+
+/**
+  * Encrypts with affine Caesar algorithm
+  * @param input_string Input string
+  * @param alphabet Array with alphabet
+  * @param a A parameter
+  * @param b B parameter
+  * @param m Alphabet size
+  * @param output_string Output string
+  */
+void affine_encrypt(const wchar_t *input_string,
+                    const wchar_t *alphabet, int a, int b, int m,
+                    wchar_t *output_string);
+
+/**
+  * Decrypts with affine Caesar algorithm
+  * @param input_string Input string
+  * @param alphabet Array with alphabet
+  * @param a A parameter
+  * @param b B parameter
+  * @param m Alphabet size
+  * @param output_string Output string
+  */
+void affine_decrypt(const wchar_t *input_string,
+                    const wchar_t *alphabet, int a, int b, int m,
+                    wchar_t *output_string);
+
+void affine_decrypt(const wchar_t *input_string,
+                    const wchar_t *alphabet, int a, int b, int m,
+                    wchar_t *output_string);
+
+void analyze_decrypt(ProbabilityMap &p, const wchar_t *input_string,
+                     wchar_t *output_string, wchar_t *alphabet, int m);
 
 #endif // CRYPTO_H

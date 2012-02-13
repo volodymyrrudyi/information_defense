@@ -1,19 +1,19 @@
-#include "mainwindow.h"
-#include "ui_mainwindow.h"
+#include "lab1.h"
+#include "ui_lab1.h"
 
-MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent),
-    ui(new Ui::MainWindow)
+Lab1::Lab1(QWidget *parent) :
+    QDialog(parent),
+    ui(new Ui::Lab1)
 {
     ui->setupUi(this);
 }
 
-MainWindow::~MainWindow()
+Lab1::~Lab1()
 {
     delete ui;
 }
 
-void MainWindow::on_btnEncrypt_clicked()
+void Lab1::on_btnEncrypt_clicked()
 {
     QString key1 = this->ui->editFirstKey->text();
     QString key2 = this->ui->editSecondKey->text();
@@ -34,7 +34,7 @@ void MainWindow::on_btnEncrypt_clicked()
     this->ui->editResult->document()->setPlainText(res);
 }
 
-void MainWindow::on_btnDecrypt_clicked()
+void Lab1::on_btnDecrypt_clicked()
 {
     QString key1 = this->ui->editFirstKey->text();
     QString key2 = this->ui->editSecondKey->text();
@@ -56,12 +56,12 @@ void MainWindow::on_btnDecrypt_clicked()
     this->ui->editResult->document()->setPlainText(res);
 }
 
-void MainWindow::on_editMessage_undoAvailable(bool b)
+void Lab1::on_editMessage_undoAvailable(bool b)
 {
 
 }
 
-void MainWindow::on_editMessage_textChanged()
+void Lab1::on_editMessage_textChanged()
 {
     check_input();
     int input_length;
@@ -78,7 +78,7 @@ void MainWindow::on_editMessage_textChanged()
     this->ui->labelInputLength->setText(strLength);
 }
 
-void MainWindow::check_input()
+void Lab1::check_input()
 {
 
     int key1_length = this->ui->editFirstKey->text().length();
@@ -110,7 +110,7 @@ void MainWindow::check_input()
     }
 }
 
-void MainWindow::on_editFirstKey_textChanged(const QString &arg1)
+void Lab1::on_editFirstKey_textChanged(const QString &arg1)
 {
     check_input();
     QString strLength = QString("Length: ") +
@@ -118,7 +118,7 @@ void MainWindow::on_editFirstKey_textChanged(const QString &arg1)
     this->ui->lblKey1Length->setText(strLength);
 }
 
-void MainWindow::on_editSecondKey_textChanged(const QString &arg1)
+void Lab1::on_editSecondKey_textChanged(const QString &arg1)
 {
     check_input();
     QString strLength = QString("Length: ") +

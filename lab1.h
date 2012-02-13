@@ -1,21 +1,21 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QMainWindow>
+#include <QDialog>
 #include <QFileDialog>
 #include "crypto.h"
 
 namespace Ui {
-class MainWindow;
+class Lab1;
 }
 
-class MainWindow : public QMainWindow
+class Lab1 : public QDialog
 {
     Q_OBJECT
     
 public:
-    explicit MainWindow(QWidget *parent = 0);
-    ~MainWindow();
+    explicit Lab1(QWidget *parent = 0);
+    ~Lab1();
     
 private slots:
     void on_btnEncrypt_clicked();
@@ -32,7 +32,7 @@ private slots:
 
 private:
     void check_input();
-    Ui::MainWindow *ui;
+    Ui::Lab1 *ui;
 };
 
 #endif // MAINWINDOW_H

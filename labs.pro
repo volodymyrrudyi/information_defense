@@ -11,10 +11,18 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp \
-    crypto.cpp
+    crypto.cpp \
+    lab1.cpp \
+    lab2.cpp \
+    labchooser.cpp
 
-HEADERS  += mainwindow.h \
-    crypto.h
+HEADERS  += \
+    crypto.h \
+    lab1.h \
+    lab2.h \
+    labchooser.h
 
-FORMS    += mainwindow.ui
+FORMS    += \
+    lab1.ui \
+    lab2.ui \
+    labchooser.ui
