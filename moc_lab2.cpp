@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'lab2.h'
 **
-** Created: Mon Feb 13 07:02:17 2012
+** Created: Mon Feb 13 08:42:27 2012
 **      by: The Qt Meta Object Compiler version 62 (Qt 4.7.4)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -23,7 +23,7 @@ static const uint qt_meta_data_Lab2[] = {
        5,       // revision
        0,       // classname
        0,    0, // classinfo
-       4,   14, // methods
+       5,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -35,6 +35,7 @@ static const uint qt_meta_data_Lab2[] = {
       30,    5,    5,    5, 0x08,
       53,    5,    5,    5, 0x08,
       76,    5,    5,    5, 0x08,
+     100,    5,    5,    5, 0x08,
 
        0        // eod
 };
@@ -42,7 +43,7 @@ static const uint qt_meta_data_Lab2[] = {
 static const char qt_meta_stringdata_Lab2[] = {
     "Lab2\0\0on_btnEncrypt_clicked()\0"
     "on_rbRussian_clicked()\0on_rbEnglish_clicked()\0"
-    "on_btnDecrypt_clicked()\0"
+    "on_btnDecrypt_clicked()\0on_btnAnalyze_clicked()\0"
 };
 
 const QMetaObject Lab2::staticMetaObject = {
@@ -78,9 +79,10 @@ int Lab2::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
         case 1: on_rbRussian_clicked(); break;
         case 2: on_rbEnglish_clicked(); break;
         case 3: on_btnDecrypt_clicked(); break;
+        case 4: on_btnAnalyze_clicked(); break;
         default: ;
         }
-        _id -= 4;
+        _id -= 5;
     }
     return _id;
 }

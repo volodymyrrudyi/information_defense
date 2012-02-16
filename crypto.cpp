@@ -1,5 +1,12 @@
 #include "crypto.h"
 
+struct OccurenceComp {
+  bool operator() (pair<char, double> a, pair<char, double> b)
+  {
+      return a.second < b.second;
+  }
+} occurenceLess;
+
 void copy_column(wchar_t **src, wchar_t **dest, int rows, int first, int second)
 {
     for(int i = 0; i < rows; i++)
@@ -229,7 +236,7 @@ void decrypt(const wchar_t *input_string, wchar_t *output_string,
     delete [] secondKey;
 }
 
-int indexOf(wchar_t c, const wchar_t *alphabet, int m)
+int indexOf(char c, const char *alphabet, int m)
 {
     for(int i = 0; i < m; i++)
     {
@@ -242,12 +249,12 @@ int indexOf(wchar_t c, const wchar_t *alphabet, int m)
     return -1;
 }
 
-void affine_encrypt(const wchar_t *input_string,
-                    const wchar_t *alphabet, int a, int b, int m,
-                    wchar_t *output_string)
+void affine_encrypt(const char *input_string,
+                    const char *alphabet, int a, int b, int m,
+                    char *output_string)
 {
     int pos;
-    for(int i = 0; i < wcslen(input_string); i++)
+    for(int i = 0; i < strlen(input_string); i++)
     {
         if (isalpha(input_string[i]))
         {
@@ -260,7 +267,7 @@ void affine_encrypt(const wchar_t *input_string,
         }
     }
 
-    output_string[wcslen(input_string)] = '\0';
+    output_string[strlen(input_string)] = '\0';
 }
 
 int gcd_extended (int a, int b, int & x, int & y) {
@@ -284,14 +291,39 @@ int reverse_number(int a, int m)
     return x;
 }
 
-void affine_decrypt(const wchar_t *input_string,
-                    const wchar_t *alphabet, int a, int b, int m,
-                    wchar_t *output_string)
+void build_occurence_vector(ProbabilityMap &p, OccurenceVector &v)
+{
+    v.clear();
+
+    for(ProbabilityMap::iterator i = p.begin(); i != p.end(); i++)
+    {
+        v.push_back(*i);
+    }
+
+    sort(v.begin(), v.end(), occurenceLess );
+}
+
+void build_translation_map(const OccurenceVector &first,
+                           const OccurenceVector &second,
+                           TranslationMap &dict)
+{
+    dict.clear();
+
+    for(int i = 0; i < first.size(); i++)
+    {
+        dict[first.at(i).first] = second.at(i).first;
+        qDebug("Translation: %c -> %c",first.at(i).first, second.at(i).first );
+    }
+}
+
+void affine_decrypt(const char *input_string,
+                    const char *alphabet, int a, int b, int m,
+                    char *output_string)
 {
     long pos;
     int index;
     int reverse;
-    for(int i = 0; i < wcslen(input_string); i++)
+    for(int i = 0; i < strlen(input_string); i++)
     {
         if (isalpha(input_string[i]))
         {
@@ -310,41 +342,16 @@ void affine_decrypt(const wchar_t *input_string,
 
     }
 
-    output_string[wcslen(input_string)] = '\0';
+    output_string[strlen(input_string)] = '\0';
 }
 
-wchar_t find_proper( ProbabilityMap &probs, ProbabilityMap &p,
-                     wchar_t c)
+void analyze_decrypt(ProbabilityMap &p, const char *input_string,
+                     char *output_string, char *alphabet, int m)
 {
-    double delta = probs[c] - p[c];
-    if (delta < 0)
-        delta *= -1.0;
-
-    wchar_t res = p.begin()->first;
-
-    for(ProbabilityMap::iterator i = p.begin(); i != p.end(); i++)
-    {
-        double curDelta = i->second - probs[c];
-        if (curDelta < 0)
-            curDelta *= -1.0;
-
-        if (curDelta < delta)
-        {
-            delta = curDelta;
-            res = i->first;
-        }
-    }
-
-    return res;
-}
-
-void analyze_decrypt(ProbabilityMap &p, const wchar_t *input_string,
-                     wchar_t *output_string, wchar_t *alphabet, int m)
-{
-    map<wchar_t, int> numChars;
+    map<char, int> numChars;
     ProbabilityMap probs;
 
-    int length = wcslen(input_string);
+    int length = strlen(input_string);
 
     for(int i = 0; i < m ; i++)
     {
@@ -352,21 +359,38 @@ void analyze_decrypt(ProbabilityMap &p, const wchar_t *input_string,
         probs[alphabet[i]]  = 0.0;
     }
 
-    for(int i = 0; i < wcslen(input_string); i++)
+    for(int i = 0; i < strlen(input_string); i++)
     {
-        numChars[input_string[i]] += 1;
+        if (isalpha(input_string[i]))
+            numChars[input_string[i]] += 1;
     }
 
-    for(map<wchar_t, int>::iterator i = numChars.begin();
+    for(map<char, int>::iterator i = numChars.begin();
         i != numChars.end(); i++)
     {
         probs[i->first] = (double)i->second / (double)length;
+        qDebug("Probability for '%c' is %f", i->first, probs[i->first] );
     }
+
+    TranslationMap dict;
+    OccurenceVector ideal;
+    OccurenceVector real;
+
+    build_occurence_vector(p, ideal);
+    build_occurence_vector(probs, real);
+    build_translation_map(real, ideal, dict);
 
     for(int i = 0; i < length; i++)
     {
-        output_string[i] = find_proper(probs, p, input_string[i]);
+        if (isalpha(input_string[i]))
+        {
+            output_string[i] = dict[input_string[i]];
+        } else
+        {
+            output_string[i] = input_string[i];
+        }
     }
 
     output_string[length] = '\0';
 }
+

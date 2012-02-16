@@ -7,14 +7,17 @@
 #include <QDebug>
 using namespace std;
 
-typedef map<wchar_t, double> ProbabilityMap;
+typedef map<char, double> ProbabilityMap;
+typedef map<char, char> TranslationMap;
+typedef vector< pair<char, double> > OccurenceVector;
+
 struct KeyChar
 {
     char sym;
     int position;
 };
 
-int indexOf(wchar_t c, const wchar_t *alphabet, int m);
+int indexOf(char c, const char *alphabet, int m);
 
 /**
   @param matrix 2D Array
@@ -54,9 +57,9 @@ void decrypt(const wchar_t *input_string, wchar_t *output_string,
   * @param m Alphabet size
   * @param output_string Output string
   */
-void affine_encrypt(const wchar_t *input_string,
-                    const wchar_t *alphabet, int a, int b, int m,
-                    wchar_t *output_string);
+void affine_encrypt(const char *input_string,
+                    const char *alphabet, int a, int b, int m,
+                    char *output_string);
 
 /**
   * Decrypts with affine Caesar algorithm
@@ -67,15 +70,15 @@ void affine_encrypt(const wchar_t *input_string,
   * @param m Alphabet size
   * @param output_string Output string
   */
-void affine_decrypt(const wchar_t *input_string,
-                    const wchar_t *alphabet, int a, int b, int m,
-                    wchar_t *output_string);
+void affine_decrypt(const char *input_string,
+                    const char *alphabet, int a, int b, int m,
+                    char *output_string);
 
-void affine_decrypt(const wchar_t *input_string,
-                    const wchar_t *alphabet, int a, int b, int m,
-                    wchar_t *output_string);
+void affine_decrypt(const char *input_string,
+                    const char *alphabet, int a, int b, int m,
+                    char *output_string);
 
-void analyze_decrypt(ProbabilityMap &p, const wchar_t *input_string,
-                     wchar_t *output_string, wchar_t *alphabet, int m);
+void analyze_decrypt(ProbabilityMap &p, const char *input_string,
+                     char *output_string, char *alphabet, int m);
 
 #endif // CRYPTO_H

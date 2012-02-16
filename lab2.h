@@ -25,8 +25,12 @@ private slots:
 
     void on_btnDecrypt_clicked();
 
+
+    void on_btnAnalyze_clicked();
+
 private:
     Ui::Lab2 *ui;
+    ProbabilityMap english_p;
 };
 
 #endif // LAB2_H
